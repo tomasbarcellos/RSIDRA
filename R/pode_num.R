@@ -7,7 +7,10 @@
 #' PAM <- API_SIDRA(1612, 1, categoria = 81)
 #' numericos <- sapply(PAM, pode_num)
 
-pode_num <- <- function(x) {
+pode_num <- function(x) {
+  warn_orig <- options("warn")
+  options(warn = -1)
   numeros <- sum(!is.na(as.numeric(x)))
+  options(warn = warn_orig[[1]])
   return(all(length(x) == numeros))
 }
