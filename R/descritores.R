@@ -55,9 +55,9 @@ descritores <- function(tabela) {
   }
 
   tamanho_cat <- sapply(cat, nrow)
-  classificação <- rep(nomes_cat, times = tamanho_cat)
+  classificacao <- rep(nomes_cat, times = tamanho_cat)
 
-  cat <- cbind(classificação,
+  cat <- cbind(classificacao,
                do.call(rbind, cat),
                stringsAsFactors = FALSE)
 
@@ -67,6 +67,6 @@ descritores <- function(tabela) {
     matrix(nrow = length(.)/2, byrow = TRUE) %>%
     as.data.frame(stringsAsFactors = FALSE) %>% `names<-`(c("nível", "descrição"))
 
-  return(list(tabela = tab, variável = var,
-              categoria = cat, nível = niv))
+  return(list(tabela = tab, variavel = var,
+              categoria = cat, nivel = niv))
 }
