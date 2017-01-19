@@ -3,6 +3,7 @@ Type: Package
 Title: Conexão do R com a SIDRA
 Version: 0.1.0
 Depends:
+    R (>= 2.10),
     rvest (>= 0.3)
 Imports:
     rjson (>= 0.2),

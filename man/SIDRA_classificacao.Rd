@@ -13,7 +13,7 @@ SIDRA_classificacao(tabela)
 Esta função retorna uma lista com as variáveis e categorias de uma das tabelas da SIDRA.
 }
 \examples{
-cat_PAM <- SIDRA_cat(1612)
+cat_PAM <- SIDRA_classificacao(1612)
 }
 \keyword{IBGE}
 \keyword{SIDRA}

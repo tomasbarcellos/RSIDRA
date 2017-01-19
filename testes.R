@@ -1,21 +1,20 @@
 library(RSIDRA)
 
-categ <- SIDRA_classificacao(1612)
-categ <- unique(categ$classificacao) %>%
-  sub(pattern = "C", replacement = "") # tem que mudar
+tab <- 1612
 
-tbl <- SIDRA_tabelas(1612)$tabela
+categ <- SIDRA_classificacao(tab)
+categ <- unique(categ$classificacao)
 
-niveis <- SIDRA_nivel(1612)$nível %>%
-  sub(pattern = "N", replacement = "") # tem que mudar
+tab == SIDRA_tabelas(tab)$tabela
 
-var <- SIDRA_variaveis(1612)
+niveis <- SIDRA_nivel(tab)$nível
 
-PAM <- API_SIDRA(tabela = tbl,
+var <- SIDRA_variaveis(tab)
+
+PAM <- API_SIDRA(tabela = tab,
                  classificador = categ,
                  nivel = niveis[1])
 str(PAM)
 
-todas_tabelas <- SIDRA_tabelas()
-
-save(todas_tabelas, "tabelas.RDS")
+# todas_tabelas <- SIDRA_tabelas()
+# save(todas_tabelas, "tabelas.RDS")

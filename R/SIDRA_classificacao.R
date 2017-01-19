@@ -21,7 +21,7 @@ SIDRA_classificacao <- function(tabela) {
     })
 
   nomes_cat <- grep(pattern = "/.*?/", x = y[[3]], value = TRUE) %>%
-    gsub(pattern = "/", replacement = "")
+    gsub(pattern = "/C?", replacement = "")
   y[[3]] <- NULL
 
   cat <- vector("list", length(y) - 3)

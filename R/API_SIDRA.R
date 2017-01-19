@@ -37,11 +37,9 @@ API_SIDRA <- function(tabela,
   res <- as.data.frame(res, stringsAsFactors = FALSE)
   numericas <- which(sapply(res, pode_num))
   res[, numericas] <- sapply(res[, numericas], as.numeric)
-  warn_orig <- options("warn")
-  options(warn = -1)
-  res$V <- as.numeric(res$V)
-  options(warn = warn_orig[[1]])
-
+  suppressMessages(
+    res$V <- as.numeric(res$V)
+  )
 
   # ainda falta inserir várias verificações
 

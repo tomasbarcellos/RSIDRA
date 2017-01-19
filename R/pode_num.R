@@ -8,9 +8,8 @@
 #' numericos <- sapply(PAM, pode_num)
 
 pode_num <- function(x) {
-  warn_orig <- options("warn")
-  options(warn = -1)
-  numeros <- sum(!is.na(as.numeric(x)))
-  options(warn = warn_orig[[1]])
+  suppressMessages(
+    numeros <- sum(!is.na(as.numeric(x)))
+  )
   return(all(length(x) == numeros))
 }
