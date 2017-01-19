@@ -8,7 +8,7 @@
 #' numericos <- sapply(PAM, pode_num)
 
 pode_num <- function(x) {
-  suppressMessages(
+  suppressWarnings(
     numeros <- sum(!is.na(as.numeric(x)))
   )
   return(all(length(x) == numeros))

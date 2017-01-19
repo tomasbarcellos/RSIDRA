@@ -37,7 +37,7 @@ API_SIDRA <- function(tabela,
   res <- as.data.frame(res, stringsAsFactors = FALSE)
   numericas <- which(sapply(res, pode_num))
   res[, numericas] <- sapply(res[, numericas], as.numeric)
-  suppressMessages(
+  suppressWarnings(
     res$V <- as.numeric(res$V)
   )
 
