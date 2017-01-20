@@ -12,7 +12,7 @@ Imports:
 Author: Tomás de Siervi Barcellos
 Maintainer: Tomás de Siervi Barcellos <tomas.barcellos@gmail.com>
 Description: Pacote para download dos dados do IBGE - SIDRA.
-License: GPL-3
+License: GPL-2 | GPL-3 [expanded from: GPL (>= 2)]
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 5.0.1
