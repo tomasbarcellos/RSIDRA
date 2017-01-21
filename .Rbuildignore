@@ -5,3 +5,5 @@
 ^data-raw$
 ^tabelas.RDS$
 ^testes.R$
+^benchmark.R$
+^parametros_API.Rmd$

@@ -13,35 +13,65 @@
 #' @export
 #' @examples
 #' PAM <- API_SIDRA(1612, 81)
-# API_SIDRA
 
 API_SIDRA <- function(tabela,
-                      classificador, cod_cat = "all",
-                      nivel = 1, cod_nivel = "all",
+                      classificador, cod_cat = rep("all", length(classificador)),
+                      nivel = 1, cod_nivel = rep("all", length(nivel)),
                       periodo = "all", variavel = "allxp",
-                      header = FALSE) {
+                      inicio, fim) {
+
+  if (length(tabela) > 1) {
+    stop("Solicite os dados de uma tabela por vez. Para mais de uma use mapply()", call. = FALSE)
+    }
+
+  if (!tabela %in% RSIDRA::tabelas_SIDRA$tabela) {
+    stop("A tabela informada não é válida", call. = FALSE)
+  }
+
+  if (!missing(inicio) && !missing(fim)) {
+    periodo <- paste0(inicio, "-", fim)
+  }
+
+  if (length(nivel) != length(cod_nivel)) {
+    stop("Os argumentos nivel e cod_nivel devem ter o mesmo tamanho", call. = FALSE)
+  }
+
+  cod_nivel <- lapply(cod_nivel, paste, collapse = ",")
+
+  area <- paste0("/n", nivel, "/", cod_nivel, collapse = "")
+
+  if (length(classificador) != length(cod_cat)) {
+    stop("Os argumentos 'classificador' e 'cod_cat' devem ter o mesmo tamanho", call. = FALSE)
+  }
+
+  cod_cat <- lapply(cod_cat, paste, collapse = ",")
+
+  cod_cat <- gsub(pattern = "\\+", replacement = "%20", x = cod_cat)
+
+  categ <- paste0("/c", classificador, "/", cod_cat, collapse = "")
 
   url_fixa <- "http://api.sidra.ibge.gov.br/values"
 
-  url_variavel <- paste0("/t/", tabela,
-                         "/p/", periodo,
-                         "/v/", variavel,
-                         paste0("/n", nivel, "/"), cod_nivel,
-                         paste0("/c", classificador, "/"), cod_cat,
-                         if(header == FALSE) "/h/n")
+  url_variavel <- paste0("/t/", tabela, "/p/", periodo,
+                         "/v/", variavel, area, categ)
 
-  res <- rjson::fromJSON(file = paste0(url_fixa, url_variavel))
+  resp <- httr::GET(paste0(url_fixa, url_variavel))
+
+  print(resp);
+
+  print(httr::status_code(resp))
+
+  res <- jsonlite::fromJSON(httr::content(resp, "text",
+                                          encoding = "UTF-8"),
+                            simplifyVector = FALSE)
   res <- do.call("rbind", res)
   res <- as.data.frame(res)
   res <- lapply(X = res, FUN = do.call, what = c)
   res <- as.data.frame(res, stringsAsFactors = FALSE)
-  numericas <- which(sapply(res, pode_num))
-  res[, numericas] <- sapply(res[, numericas], as.numeric)
-  suppressWarnings(
-    res$V <- as.numeric(res$V)
-  )
-
-  # ainda falta inserir várias verificações
+  names(res) <- res[1, ]
+  res <- res[-1, ]
+  numericas <- c(grep(pattern = "\\(Código\\)", names(res)), length(res))
+  res[, numericas] <- suppressWarnings(sapply(res[, numericas], as.numeric))
 
   return(res)
 }

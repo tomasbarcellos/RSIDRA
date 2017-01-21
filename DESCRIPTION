@@ -6,9 +6,10 @@ Depends:
     R (>= 2.10),
     rvest (>= 0.3)
 Imports:
-    rjson (>= 0.2),
+    jsonlite (>= 1.0),
     stringr (>= 1.0),
-    tm (>= 0.5)
+    tm (>= 0.5),
+    httt (>= 1.2)
 Author: Tomás de Siervi Barcellos
 Maintainer: Tomás de Siervi Barcellos <tomas.barcellos@gmail.com>
 Description: Pacote para download dos dados do IBGE - SIDRA.

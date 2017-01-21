@@ -1,0 +1,9 @@
+library(RSIDRA)
+library(ecoseries)
+library(microbenchmark)
+microbenchmark(
+  ecoseries <<- ecoseries::series_sidra(1612, territory = "brazil"),
+  RSIDRA <<- RSIDRA::API_SIDRA(1612, 81, nivel = 1),
+  times = 50)
+
+dim(ecos)
