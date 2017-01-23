@@ -52,33 +52,34 @@ API_SIDRA <- function (tabela, classificador = SIDRA_classificacao(tabela),
   url_variavel <- paste0("/t/", tabela, "/p/", periodo, "/v/", 
                          variavel, area, categ)
   resp <- httr::GET(paste0(url_fixa, url_variavel))
-  
+  conteudo <- httr::content(resp, "text", encoding = "UTF-8")
   # verificação do conteúdo
   
-  if (grepl("excedeu o limite", x = conteudo) == TRUE) {
-    message(paste(
-      conteudo,
-      "Vamos contornar este problema fazendo varias solicitações menores.",
-      "Haverá maior demora", sep = "\n"))
-    valores_solicitados <- stringr::str_extract(conteudo, "[0-9]+") %>% as.numeric()
-    
-    periodos <- SIDRA_periodo(tabela)
-    requisicoes <- (valores_solicitados %/% 50000) + 1
-    
-    cada <- periodos %>% split(cut(seq_along(periodos), requisicoes)) %>%
-      lapply(range) %>% sapply(paste0, collapse = "-")
-    
-    lista_resposta <- lapply(cada, API_SIDRA,
-                             tabela = tabela, classificador = classificador,
-                             cod_cat = cod_cat, nivel = nivel,
-                             cod_nivel = cod_nivel, variavel = variavel)
-    return(do.call("rbind", lista_resposta) %>% as.data.frame())
+  if (httr::http_error(resp) == TRUE) {
+    if (any(grepl("excedeu o limite", x = conteudo)) == TRUE) {
+      message(paste(
+        conteudo,
+        "Vamos contornar este problema fazendo varias solicitações menores.",
+        "Haverá maior demora", sep = "\n"))
+      valores_solicitados <- stringr::str_extract(conteudo, "[0-9]+") %>% as.numeric()
+      
+      periodos <- SIDRA_periodo(tabela)
+      requisicoes <- (valores_solicitados %/% 50000) + 1
+      
+      cada <- periodos %>% split(cut(seq_along(periodos), requisicoes)) %>%
+        lapply(range) %>% sapply(paste0, collapse = "-")
+      
+      lista_resposta <- lapply(cada, API_SIDRA,
+                               tabela = tabela, classificador = classificador,
+                               cod_cat = cod_cat, nivel = nivel,
+                               cod_nivel = cod_nivel, variavel = variavel)
+      return(do.call("rbind", lista_resposta) %>% as.data.frame())
+    } else (stop("Erro na resposta recebida pela API"))
   }
   
-  # Conteúdo já derificado
+  # Conteúdo já verificado
   
-  res <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), 
-                            simplifyVector = FALSE)
+  res <- jsonlite::fromJSON(conteudo, simplifyVector = FALSE)
   res <- do.call("rbind", res)
   res <- as.data.frame(res)
   res <- lapply(X = res, FUN = do.call, what = c)
