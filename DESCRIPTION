@@ -1,6 +1,6 @@
 Package: RSIDRA
 Type: Package
-Title: Conex√£o do R com a SIDRA
+Title: Conex„o do R com a SIDRA
 Version: 0.1.0
 Depends:
     R (>= 2.10),
@@ -8,12 +8,12 @@ Depends:
 Imports:
     jsonlite (>= 1.0),
     stringr (>= 1.0),
-    tm (>= 0.5),
-    httt (>= 1.2)
-Author: Tom√°s de Siervi Barcellos
-Maintainer: Tom√°s de Siervi Barcellos <tomas.barcellos@gmail.com>
+    httr (>= 1.2)
+Author: Tom·s de Siervi Barcellos
+Maintainer: Tom·s de Siervi Barcellos <tomas.barcellos@gmail.com>
 Description: Pacote para download dos dados do IBGE - SIDRA.
-License: GPL-2 | GPL-3 [expanded from: GPL (>= 2)]
+License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 5.0.1
+Suggests: testthat

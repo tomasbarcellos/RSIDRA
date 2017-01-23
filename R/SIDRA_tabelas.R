@@ -17,37 +17,12 @@ SIDRA_tabelas <- function(tabela) {
     return(df_tabs)
   }
 
-  pag <- try(read_html(paste0("http://api.sidra.ibge.gov.br/desctabapi.aspx?c=",
-                          tabela), options = c("NOERROR", "NOWARNING")))
+  resposta <- descritores(tabela)
 
-  if ("try-error" %in% class(pag)) {
-    tf <- tempfile()
-    download.file(url = paste0("http://api.sidra.ibge.gov.br/desctabapi.aspx?c=",
-                               tabela),
-                  destfile = tf, quiet = TRUE)
-    pag <- read_html(tf, encoding = "UTF-8")
-    file.remove(tf)
-  }
+  # tabela
+  ids_tabela <- grep(pattern = "Tabela", x = resposta$ids, value = TRUE)
 
-  closeAllConnections()
-
-  if (exists('pag')) cat("Informação coletada com sucesso!\n")
-
-  y <- pag %>% html_nodes("table") %>% html_text() %>%
-    stringr::str_split("\r\n") %>% lapply(tm::stripWhitespace) %>%
-    lapply(function(x) x[!x %in% c(" ", "")]) %>%
-    lapply(function(x) {
-      x[substr(x, 1,1) == " "] <- substr(x[substr(x, 1,1) == " "],
-                                         2,nchar(x[substr(x, 1,1) == " "]))
-      x
-    })
-
-  tab <- paste(y[[1]], collapse = "") %>%
-    sub(pattern = "/T/ Tabela: ", replacement = "") %>%
-    strsplit(" - ") %>% `[[`(1)
-
-  df_tab <- data.frame(tabela = tab[1],
-                       descricao = tab[2],
-                       stringsAsFactors = FALSE)
-  return(df_tab)
+  lapply(ids_tabela, pega_texto, pagina = resposta$conteudo) %>%
+    matrix(ncol = 2, byrow = TRUE) %>%
+    as.data.frame() %>% `names<-`(c('codigo', "descrição"))
 }

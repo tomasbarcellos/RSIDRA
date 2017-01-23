@@ -8,24 +8,11 @@
 #' nivel_PAM <- SIDRA_nivel(1612)
 
 SIDRA_nivel <- function(tabela) {
-  pag <- read_html(paste0("http://api.sidra.ibge.gov.br/desctabapi.aspx?c=",
-                          tabela))
+  resposta <- descritores(tabela)
 
-  y <- pag %>% html_nodes("table") %>% html_text() %>%
-    stringr::str_split("\r\n") %>% lapply(tm::stripWhitespace) %>%
-    lapply(function(x) x[!x %in% c(" ", "")]) %>%
-    lapply(function(x) {
-      x[substr(x, 1,1) == " "] <- substr(x[substr(x, 1,1) == " "],
-                                         2,nchar(x[substr(x, 1,1) == " "]))
-      x
-    })
+  ids_nivel <- grep(pattern = "Nivelterritorial", x = resposta$ids, value = TRUE)[-1]
 
-  niv <- y[[length(y)]] %>% (function(x) {
-    x[-grep(pattern = "Listar unidades", x = x)]
-  }) %>% gsub(pattern = "/N?", replacement = "") %>%
-    matrix(nrow = length(.)/2, byrow = TRUE) %>%
-    as.data.frame(stringsAsFactors = FALSE) %>%
-    `names<-`(c("nível", "descrição"))
-
-  return(niv)
+  lapply(ids_nivel, pega_texto, pagina = resposta$conteudo) %>%
+    matrix(ncol = 2, byrow = TRUE) %>%
+    as.data.frame() %>% `names<-`(c('codigo', "descrição"))
 }

@@ -2,7 +2,9 @@
 
 export(API_SIDRA)
 export(SIDRA_classificacao)
+export(SIDRA_fonte)
 export(SIDRA_nivel)
+export(SIDRA_notas)
+export(SIDRA_periodo)
 export(SIDRA_tabelas)
 export(SIDRA_variaveis)
-export(descritores)

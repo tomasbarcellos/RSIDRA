@@ -4,26 +4,27 @@
 \alias{API_SIDRA}
 \title{Conexão do R com a SIDRA - IBGE}
 \usage{
-API_SIDRA(tabela, classificador, cod_cat = "all", nivel = 1,
-  cod_nivel = "all", periodo = "all", variavel = "allxp",
-  header = FALSE)
+API_SIDRA(tabela, classificador = SIDRA_classificacao(tabela),
+  cod_cat = rep("all", length(classificador)), nivel = 1,
+  cod_nivel = rep("all", length(nivel)), periodo = "all",
+  variavel = "allxp", inicio, fim)
 }
 \arguments{
 \item{tabela}{Número da tabela.}
 
-\item{classificador}{Classificador a ser detalhado. Para verificar os classificadores disponíveis na tabela em questão use a função descritores().}
+\item{classificador}{Classificador a ser detalhado. O padrão é "", retornando os totais da tabela. Para verificar os classificadores disponíveis na tabela em questão use a função SIDRA_classidicacao().}
 
-\item{cod_cat}{Código para definição de subconjunto do classificador. Para verificar as categorias disponíveis na tabela em questão use a função descritores().}
+\item{cod_cat}{Código para definição de subconjunto do classificador. Para verificar as categorias disponíveis na tabela em questão use a função SIDRA_classidicacao().}
 
-\item{nivel}{Nível geográfico de agregação dos dados 1 = Brasil e 6 = Município.}
+\item{nivel}{Nível geográfico de agregação dos dados 1 = Brasil e 6 = Município, etc. Para verificar os níveis disponíveis na tabela em questão use a função SIDRA_nivel().}
 
-\item{cod_nivel}{Código contendo conjunto no nível que será selecionado. Pode-se usar o código de determina UF para obter apenas seus dados ou "all" para todos (padrão).}
+\item{cod_nivel}{Código contendo conjunto no nível que será selecionado. Pode-se usar o código de determina UF para obter apenas seus dados ou "all" para todos (padrão). Para mais informações visite http://api.sidra.ibge.gov.br/home/ajuda.}
 
-\item{periodo}{Período dos dados. O padrão é "all", isto é, todos os anos disponíveis.}
+\item{periodo}{Período dos dados. O padrão é "all", isto é, todos os anos disponíveis. Para verificar os períodos disponíveis na tabela em questão use a função SIDRA_periodo().}
 
-\item{variavel}{Quais variáveis devem retornar? O padrão é "allxp", isto é, todas exceto aquelas calculadas pela SIDRA (percentuais)}
+\item{variavel}{Quais variáveis devem retornar? O padrão é "allxp", isto é, todas exceto aquelas calculadas pela SIDRA (percentuais). Para verificar as variáveis disponíveis na tabela em questão use a função SIDRA_variaveis().}
 
-\item{header}{Deve retornar com um cabeçalho? Mesmo com header = FALSE, as colunas são nomeadas.}
+\item{inicio, fim}{Início e fim do período desejado.}
 }
 \description{
 Esta função retorna um data.frame a tabela solicitada.

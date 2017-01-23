@@ -10,25 +10,12 @@
 # library(rvest)
 
 SIDRA_variaveis <- function(tabela) {
-  pag <- read_html(paste0("http://api.sidra.ibge.gov.br/desctabapi.aspx?c=",
-                          tabela))
-  
-  y <- pag %>% html_nodes("table") %>% html_text() %>%
-    stringr::str_split("\r\n") %>% lapply(tm::stripWhitespace) %>%
-    lapply(function(x) x[!x %in% c(" ", "")]) %>%
-    lapply(function(x) {
-      x[substr(x, 1,1) == " "] <- substr(x[substr(x, 1,1) == " "],
-                                         2,nchar(x[substr(x, 1,1) == " "]))
-      x
-    })
-  
-  var <- y[[2]] %>%
-    sub(pattern = " - casas decimais:.*", replacement = "") %>%
-    strsplit(" ") %>% lapply(function(x) {
-      return(c(x[1], paste(x[2:length(x)], collapse = " ")))
-    }) %>% do.call(what = "rbind") %>%
-    as.data.frame(stringsAsFactors = FALSE) %>%
-    `names<-`(c("cod_var", "desc_var"))
+  resposta <- descritores(tabela)
 
-  return(var)
+  # variaveis
+  ids_var <- grep(pattern = "Variaveis", x = resposta$ids, value = TRUE)[-1]
+  lapply(ids_var, pega_texto, pagina = resposta$conteudo) %>%
+    matrix(ncol = 2, byrow = TRUE) %>%
+    as.data.frame() %>% `names<-`(c('codigo', "descrição"))
+
 }
