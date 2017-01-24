@@ -3,3 +3,5 @@ packrat/lib*/
 .RData
 .Rhistory
 tabelas.RDS
+^testes.R
+tests

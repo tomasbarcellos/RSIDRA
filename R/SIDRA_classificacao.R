@@ -2,10 +2,12 @@
 #'
 #' Esta função retorna uma lista com as variáveis e categorias de uma das tabelas da SIDRA.
 #' @param tabela Número da tabela.
+#' @param consulta Em caso de consulta, além dos códigos, as descrições também são retornadas.
 #' @keywords IBGE SIDRA dados
 #' @export
 #' @examples
 #' clas_PAM <- SIDRA_classificacao(1612)
+#' SIDRA_classidicacao(1612, TRUE) # imprime os classidicadores com sua descrição
 
 SIDRA_classificacao <- function(tabela, consulta = FALSE) {
   resposta <- descritores(tabela)

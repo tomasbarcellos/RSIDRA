@@ -4,8 +4,6 @@
 #' @param pagina Página que retorna da requisição da API com a função descritores().
 #' @param css Seletor de css em que as informações serão tiradas
 #' @keywords IBGE SIDRA dados
-#' @examples
-#' clas_PAM <- SIDRA_classificacao(1612)
 
 pega_texto <- function(pagina, css) {
   requireNamespace("rvest")

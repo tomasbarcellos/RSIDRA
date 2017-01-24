@@ -1,6 +1,6 @@
 #' Conexão do R com a SIDRA - IBGE
 #'
-#' Esta função retorna uma lista com as variáveis e categorias de uma das tabelas da SIDRA.
+#' Esta função retorna uma lista com os ids e o conteúdo (XML) da descrição da tabela solicitada.
 #' @param tabela Número da tabela.
 #' @keywords IBGE SIDRA dados
 #' @examples
